@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="/ico/favicon.ico">
+
+    <title>API Management Demo</title>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/prettyprint.css" rel="stylesheet">
+    <script type="text/javascript" src="js/knockout-3.1.0.js"></script>
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <!--<ul class="nav nav-pills pull-right">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>-->
+            <h3 class="text-muted"><span data-bind="text: title"></span></h3>
+        </div>
+
+        <div class="jumbotron">
+            <h1><span data-bind="text: head"></span></h1>
+            <p class="lead"><span data-bind="text: headtext"></span></p>
+            <p><a class="btn btn-lg btn-success" href="#" id="button" role="button"><span data-bind="text: buttontext"></span></a></p>
+        </div>
+
+        <div class="row marketing">
+            <div class="col-lg-6">
+                <h4><span data-bind="text: requesttitle"></span></h4>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form id="requestform"></form>
+                    </div>
+
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <p><pre><code data-bind="html: requestformatted"></code></pre></p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-6">
+                <h4><span data-bind="text: responsetitle"></span></h4>
+                <p><pre><code data-bind="html: response"></code></pre></p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; CloudCompanion 2014</p>
+        </div>
+    </div>
+
+
+    <script src="/js/prettyprint.js"></script>
+    <script src="Scripts/jquery-1.6.4.min.js"></script>
+    <script src="/Scripts/jquery.signalR-2.0.0.js"></script>
+    <script src="/js/jquery.dform-1.1.0.js"></script>
+    <script src="/signalr/hubs"></script>
+    <script type="text/javascript">
+        $(function () {
+            // Generate a form
+
+        });
+
+        $(function () {
+            function ViewModel() {
+                this.head = ko.observable("Loading...");
+                this.title = ko.observable("Loading...");
+                this.headtext = ko.observable("Loading...");
+                this.buttontext = ko.observable("Loading...");
+                this.url = ko.observable("Loading...");
+                this.user = ko.observable("Loading...");
+                this.pwd = ko.observable("Loading...");
+                this.method = ko.observable("Loading...");
+                this.headers = ko.observable("Loading...");
+                this.requesttitle = ko.observable("Loading...");
+                this.request = ko.observable("Loading...");
+                this.requestformatted = ko.observable("Loading...");
+                this.requestform = ko.observable("Loading...");
+                this.responsetitle = ko.observable("Loading...");
+                this.response = ko.observable("Loading...");
+            }
+
+            var avm = new ViewModel();
+            ko.applyBindings(avm);
+
+            var chat = $.connection.chatHub;
+            chat.client.updateState = function (state) {
+
+                var state = jQuery.parseJSON(state);
+                avm.head(state.head);
+                 avm.headtext(state.headtext);
+                avm.title(state.title);
+                avm.buttontext(state.buttontext);
+                avm.url(state.url);
+                avm.user(state.user);
+                avm.pwd(state.pwd);
+                avm.headers(state.headers);
+                avm.method(state.method);
+                avm.request(state.request);
+                avm.requestformatted(state.request);
+                avm.requestform(state.requestform);
+                avm.requesttitle(state.requesttitle);
+                avm.response(state.response);
+                avm.responsetitle(state.responsetitle);
+
+                $("#requestform").empty();
+                $("#requestform").dform(avm.requestform());
+
+            };
+
+            $.connection.hub.start().done(function () {
+                $('#button').click(function () {
+
+                    var str = '';
+                    var elem = document.getElementById('requestform').elements;
+                    for (var i = 0; i < elem.length; i++) {
+                        avm.request()[elem[i].name] = elem[i].value;
+                    }
+
+                    avm.requestformatted(library.json.prettyPrint(avm.request()));
+
+                    var flickerAPI = avm.url();// "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
+                    $.getJSON(flickerAPI, avm.request()) //{tags: "mount rainier",tagmode: "any",format: "json"}
+                      .done(function (data) {
+                          avm.response(library.json.prettyPrint(data));
+                      });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
