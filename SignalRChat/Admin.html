@@ -78,7 +78,7 @@
 
 
             var presets = [{
-                "Name": "Demo1",
+                "Name": "Demo1 Flickr call with 'tags' parameter.",
                 "Order": 0,
                 "Settings":
                 {
@@ -110,15 +110,16 @@
                     "response": "Nothing called yet..."
                 }
             },
+
               {
                   "Name": "Demo2",
                   "Order": 0,
                   "Settings":
                   {
                       "title": "API Management Demo App",
-                      "head": "OData feed demo",
+                      "head": "Attendee OData feed. List all attendees.",
                       "headtext": "Let's call an ODATA service and see what happens!",
-                      "buttontext": "CALL ODATA FEED",
+                      "buttontext": "GET ATTENDEES",
                       "url": "http://localhost:52527/odata/Attendees",
                       "method": "GET",
                       "requestform": "",
@@ -130,6 +131,57 @@
                       "responsetitle": "Response:",
                       "response": "Nothing called yet..."
                   }
+              },
+              {
+                  "Name": "Demo3",
+                  "Order": 0,
+                  "Settings":
+                   {
+                       "title": "API Management Demo App",
+                       "head": "OData feed demo",
+                       "headtext": "Let's call an ODATA service and see what happens!",
+                       "buttontext": "ADD ATTENDEE",
+                       "url": "http://localhost:52527/odata/Attendees",
+                       "method": "PUT",
+                       "requestform": {
+                           "ID":"755e8c0a-1060-4328-8e47-34c196dcd426","Name":"George","Company":"CMG","Recurring":true,"IaaS":true,"PaaS":true,"SaaS":true
+
+                           "html":
+                           [
+                               {
+                                   "name": "Name",
+                                   "id": "Name",
+                                   "caption": "Name",
+                                   "type": "text",
+                                   "placeholder": "Enter the attendee name.",
+                                   "value": "George Clone-y"
+                   },
+              {
+                                   "name": "Company",
+                  "id": "Company",
+                  "caption": "Company",
+                  "type": "text",
+                  "placeholder": "Enter the company name.",
+                  "value": "Clone Inc."
+              },
+               {
+                   "name": "Recurring",
+                   "id": "Recurring",
+                   "caption": "Recurring",
+                   "type": "checkbox",
+                   "placeholder": "Has the attendee visited WAZUGNL before?",
+                   "value": "George Clone-y"
+               }
+                           ]
+                       },
+                       "user": "me",
+                       "pwd": "youwish",
+                       "headers": "",
+                       "requesttitle": "No parameters for this request defined.",
+                       "request": "",
+                       "responsetitle": "Response:",
+                       "response": "Nothing called yet..."
+                   }
               }
             ];
 
