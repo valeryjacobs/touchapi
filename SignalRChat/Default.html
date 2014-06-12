@@ -10,9 +10,30 @@
 
     <title>API Management Demo</title>
 
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet">
     <link href="/css/prettyprint.css" rel="stylesheet">
     <script type="text/javascript" src="js/knockout-3.1.0.js"></script>
+    <style>
+        h1 {
+            font-size: 400%;
+        }
+
+
+
+        h2 {
+            font-size: 300%;
+        }
+
+        h3 {
+            font-size: 200%;
+        }
+
+
+
+        .responsiveButton {
+            font-size: 150%;
+        }
+    </style>
 
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -26,42 +47,89 @@
 
 <body>
     <div class="container">
-        <div class="header">
-            <!--<ul class="nav nav-pills pull-right">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>-->
-            <h3 class="text-muted"><span data-bind="text: title"></span></h3>
-        </div>
-
         <div class="jumbotron">
             <h1><span data-bind="text: head"></span></h1>
-            <p class="lead"><span data-bind="text: headtext"></span></p>
-            <p><a class="btn btn-lg btn-success" href="#" id="button" role="button"><span data-bind="text: buttontext"></span></a></p>
+            <p class="lead"><h2><span data-bind="text: headtext"></span></h2></p>
+            <p><h1><a class="btn btn-lg btn-success responsiveButton" href="#" id="startbutton" disabled="disabled" role="button">Start</a></h1></p>
         </div>
 
-        <div class="row marketing">
-            <div class="col-lg-6">
-                <h4><span data-bind="text: requesttitle"></span></h4>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <form id="requestform"></form>
+        <div id="request" class="row marketing page-section">
+            <div class="col-lg-10">
+                <div class="panel-body">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h2>Request details</h2></div>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">Description</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><h2><span data-bind="text: requesttitle" style="margin:3px;"></span></h2></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">Request parameters</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div>
+                                            <form id="requestform"></form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><h3>Url</h3></td>
+                                    <td><h3><span data-bind="text: url"></span></h3> </td>
+                                </tr>
+                                <tr>
+                                    <td><h3>Headers</h3></td>
+                                    <td><h2><span data-bind="text: headers"></span></h2></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">Request body</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><p><h3><pre><code data-bind="html: requestformatted"></code></pre></h3></p></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h1><a disabled="disabled" class="btn btn-lg btn-success responsiveButton" style="margin:5px" href="#" id="button" role="button"><span data-bind="text: buttontext"></span></a></h1>
                     </div>
-
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <p><pre><code data-bind="html: requestformatted"></code></pre></p>
-                    </div>
-
-                </div>
-
             </div>
+        </div>
 
-            <div class="col-lg-6">
-                <h4><span data-bind="text: responsetitle"></span></h4>
-                <p><pre><code data-bind="html: response"></code></pre></p>
+        <div id="response" class="row marketing page-section">
+            <div class="col-lg-10">
+
+                <div class="panel-body">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h2>Response details</h2></div>
+
+
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td><h4>Response time</h4></td>
+                                    <td><h3><span data-bind="text: responseTime"></span></h3></td>
+                                </tr>
+                                <tr>
+                                    <td><h4>Size</h4></td>
+                                    <td><h3><span data-bind="text: responseSize"></span></h3></td>
+                                </tr>
+                                <tr>
+                                    <td><h4>Status</h4></td>
+                                    <td><h3><span data-bind="text: responseStatus"></span></h3></td>
+                                </tr>
+                                <tr><td colspan="2">Response body</td></tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <p><pre><code data-bind="html: response"></code></pre></p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -84,21 +152,22 @@
 
         $(function () {
             function ViewModel() {
-                this.head = ko.observable("Loading...");
-                this.title = ko.observable("Loading...");
-                this.headtext = ko.observable("Loading...");
-                this.buttontext = ko.observable("Loading...");
-                this.url = ko.observable("Loading...");
-                this.user = ko.observable("Loading...");
-                this.pwd = ko.observable("Loading...");
-                this.method = ko.observable("Loading...");
-                this.headers = ko.observable("Loading...");
-                this.requesttitle = ko.observable("Loading...");
-                this.request = ko.observable("Loading...");
-                this.requestformatted = ko.observable("Loading...");
-                this.requestform = ko.observable("Loading...");
-                this.responsetitle = ko.observable("Loading...");
-                this.response = ko.observable("Loading...");
+                this.head = ko.observable("API Management Demo App");
+                this.headtext = ko.observable("This App lets you call APIs configured by the presenter. ");
+                this.buttontext = ko.observable("Submit request");
+                this.url = ko.observable("");
+                this.user = ko.observable("");
+                this.pwd = ko.observable("");
+                this.method = ko.observable("");
+                this.headers = ko.observable("");
+                this.requesttitle = ko.observable("This text describes the functionality exposed by te API operation.");
+                this.request = ko.observable("");
+                this.response = ko.observable("");
+                this.requestformatted = ko.observable("");
+                this.requestform = ko.observable("");
+                this.responseTime = ko.observable("");
+                this.responseSize = ko.observable("");
+                this.responseStatus = ko.observable("");
             }
 
             var avm = new ViewModel();
@@ -107,10 +176,14 @@
             var chat = $.connection.chatHub;
             chat.client.updateState = function (state) {
 
+                $('#startbutton').attr('disabled', false);
+                $('#button').attr('disabled', true);
+
+                $('html, body').animate({ scrollTop: 0 }, 'slow');
+
                 var state = jQuery.parseJSON(state);
                 avm.head(state.head);
-                 avm.headtext(state.headtext);
-                avm.title(state.title);
+                avm.headtext(state.headtext);
                 avm.buttontext(state.buttontext);
                 avm.url(state.url);
                 avm.user(state.user);
@@ -118,11 +191,15 @@
                 avm.headers(state.headers);
                 avm.method(state.method);
                 avm.request(state.request);
-                avm.requestformatted(state.request);
+
+
+                avm.requestformatted(library.json.prettyPrint(avm.request()));
                 avm.requestform(state.requestform);
                 avm.requesttitle(state.requesttitle);
-                avm.response(state.response);
-                avm.responsetitle(state.responsetitle);
+
+                avm.responseTime("");
+                avm.responseSize("");
+                avm.responseStatus("");
 
                 $("#requestform").empty();
                 $("#requestform").dform(avm.requestform());
@@ -130,8 +207,19 @@
             };
 
             $.connection.hub.start().done(function () {
+
+                $('#startbutton').click(function () {
+                    scrollToID('#' + 'request', 750);
+
+                    $('#button').attr('disabled', false);
+                });
+
+
                 $('#button').click(function () {
 
+                    scrollToID('#' + 'response', 750);
+
+                    avm.response("Calling API...");
                     var str = '';
                     var elem = document.getElementById('requestform').elements;
                     for (var i = 0; i < elem.length; i++) {
@@ -140,13 +228,52 @@
 
                     avm.requestformatted(library.json.prettyPrint(avm.request()));
 
-                    var flickerAPI = avm.url();// "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
-                    $.getJSON(flickerAPI, avm.request()) //{tags: "mount rainier",tagmode: "any",format: "json"}
-                      .done(function (data) {
-                          avm.response(library.json.prettyPrint(data));
-                      });
-                });
+                    var apiURL = avm.url();// "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
+                    //if (amv.method() == 'GET') {
+                    //    $.getJSON(apiURL, avm.request()) //{tags: "mount rainier",tagmode: "any",format: "json"}
+                    //      .done(function (data) {
+                    //          avm.response(library.json.prettyPrint(data));
+                    //      });
+                    //}
+                    //else if (amv.method() == 'POST') {
+                    //    $.post(apiURL, avm.request())
+                    //    .done(function (data) {
+                    //        avm.response(library.json.prettyPrint(data));
+                    //    });
+                    //}
+
+                    var ajaxTime = new Date().getTime();
+
+                    var ajx = $.ajax({
+                        url: avm.url(),
+                        data: avm.request(),
+                        type: avm.method(),
+                        dataType: 'json',
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                                console.log('There was a 404 error.');
+                            }
+                        },
+                        success: function (data, textstatus, request) {
+                            avm.response(library.json.prettyPrint(data));
+                            avm.responseSize(JSON.stringify(data).length + " bytes  ");
+                            avm.responseStatus(textstatus);
+                        },
+                    });
+                })
             });
+
+            function scrollToID(id, speed) {
+                var offSet = 50;
+                var targetOffset = $(id).offset().top - offSet;
+                var mainNav = $('#main-nav');
+                $('html,body').animate({ scrollTop: targetOffset }, speed);
+                if (mainNav.hasClass("open")) {
+                    mainNav.css("height", "1px").removeClass("in").addClass("collapse");
+                    mainNav.removeClass("open");
+                }
+            }
+
         });
     </script>
 </body>

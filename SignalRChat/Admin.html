@@ -34,8 +34,7 @@
                                      optionsText: 'Name',
                                      optionsCaption: 'Choose a preset'"></select>
             </h2>
-            <h3><span data-bind="text: selectedPreset"></span></h3>
-            <!--<span data-bind="text: fullName"></span>-->
+            <h1><a  class="btn btn-lg btn-success" href="#" id="button" role="button">GO</a></h1>
         </div>
 
         <div class="row marketing">
@@ -43,9 +42,6 @@
             <div class="form-group" data-bind="with: selectedPreset">
                 <div data-bind="with: Settings">
                     <input type="text" class="form-control" data-bind="value: head" placeholder="Head">
-
-
-                    <input type="text" class="form-control" data-bind="value: title" placeholder="Title">
                     <input type="text" class="form-control" data-bind="value: buttontext" placeholder="Button text">
                     <input type="text" class="form-control" data-bind="value: url" placeholder="API URL">
                     <input type="text" class="form-control" data-bind="value: method" placeholder="HTTP Method">
@@ -54,12 +50,10 @@
                     <input type="text" class="form-control" data-bind="value: headers" placeholder="headers">
                     <input type="text" class="form-control" data-bind="value: requesttitle" placeholder="Request title">
                     <input type="text" class="form-control" data-bind="value: request" placeholder="Request">
-                    <input type="text" class="form-control" data-bind="value: responsetitle" placeholder="Response title">
-                    <input type="text" class="form-control" data-bind="value: response" placeholder="Response">
                     <input type="text" class="form-control" data-bind="value: requestform" placeholder="Request form">
                 </div>
             </div>
-            <h1><button id="button" class="btn btn-default">GO</button></h1>
+            
 
         </div>
         <div class="footer">
@@ -82,7 +76,6 @@
                 "Order": 0,
                 "Settings":
                 {
-                    "title": "API Management Demo App",
                     "head": "Flickr API Demo",
                     "headtext": "Let's call the flickr REST API and have some fun!",
                     "buttontext": "MAKE CALL",
@@ -106,8 +99,6 @@
                     "headers": "",
                     "requesttitle": "Fill in the form to set the request body:",
                     "request": { "tags": "default", "tagmode": "any", "format": "json" },
-                    "responsetitle": "Response:",
-                    "response": "Nothing called yet..."
                 }
             },
 
@@ -116,11 +107,10 @@
                   "Order": 0,
                   "Settings":
                   {
-                      "title": "API Management Demo App",
                       "head": "Attendee OData feed. List all attendees.",
                       "headtext": "Let's call an ODATA service and see what happens!",
                       "buttontext": "GET ATTENDEES",
-                      "url": "http://localhost:52527/odata/Attendees",
+                      "url": "http://apimanagementdemo.azurewebsites.net/odata/Attendees",
                       "method": "GET",
                       "requestform": "",
                       "user": "me",
@@ -128,8 +118,6 @@
                       "headers": "",
                       "requesttitle": "No parameters for this request defined.",
                       "request": "",
-                      "responsetitle": "Response:",
-                      "response": "Nothing called yet..."
                   }
               },
               {
@@ -137,14 +125,12 @@
                   "Order": 0,
                   "Settings":
                    {
-                       "title": "API Management Demo App",
                        "head": "OData feed demo",
                        "headtext": "Let's call an ODATA service and see what happens!",
                        "buttontext": "ADD ATTENDEE",
                        "url": "http://localhost:52527/odata/Attendees",
                        "method": "PUT",
                        "requestform": {
-                           "ID":"755e8c0a-1060-4328-8e47-34c196dcd426","Name":"George","Company":"CMG","Recurring":true,"IaaS":true,"PaaS":true,"SaaS":true
 
                            "html":
                            [
@@ -155,9 +141,9 @@
                                    "type": "text",
                                    "placeholder": "Enter the attendee name.",
                                    "value": "George Clone-y"
-                   },
+                               },
               {
-                                   "name": "Company",
+                  "name": "Company",
                   "id": "Company",
                   "caption": "Company",
                   "type": "text",
@@ -170,7 +156,7 @@
                    "caption": "Recurring",
                    "type": "checkbox",
                    "placeholder": "Has the attendee visited WAZUGNL before?",
-                   "value": "George Clone-y"
+                   "value": true
                }
                            ]
                        },
@@ -178,12 +164,34 @@
                        "pwd": "youwish",
                        "headers": "",
                        "requesttitle": "No parameters for this request defined.",
-                       "request": "",
-                       "responsetitle": "Response:",
-                       "response": "Nothing called yet..."
+                       "request": ""
+                       
                    }
+              },
+              {
+                  "Name": "Demo4: ESPN Call with key.",
+                  "Order": 4,
+                  "Settings":
+                  {
+                      "head": "ESPN API Demo",
+                      "headtext": "Let's call the ESPN REST API and see some athletes.",
+                      "buttontext": "MAKE CALL",
+                      "url": "http://api.espn.com/v1/sports/baseball/mlb/athletes?apikey=mbyqk3ca2xrdw98dvha8ydt8",
+                      "method": "GET",
+                      "requestform": "",
+                      "user": "",
+                      "pwd": "",
+                      "headers": "",
+                      "requesttitle": "No paremeters needed:",
+                      "request": "",
+                  }
               }
             ];
+
+
+            //http://api.espn.com/v1/sports/baseball/mlb/athletes?apikey=mbyqk3ca2xrdw98dvha8ydt8
+            //"ID":"755e8c0a-1060-4328-8e47-34c196dcd426","Name":"George","Company":"CMG","Recurring":true,"IaaS":true,"PaaS":true,"SaaS":true
+
 
             var queryResult = Enumerable.From(presets).Select().ToArray();
 
@@ -214,34 +222,15 @@
                 this.requesttitle = ko.observable("Fill in the form to set the request body:");
                 this.request = ko.observable({ tags: "default", tagmode: "any", format: "json" });
                 this.responsetitle = ko.observable("Response:");
-                this.response = ko.observable("...");
                 this.availablePresets = ko.observable(queryResult);
                 this.selectedPreset = ko.observable();
-                ////this.fullName = ko.computed(function () {
-                ////    return this.head() + " " + this.url() + "  " + ;
-                //}, this);
             };
 
             var avm = new ViewModel();
             ko.applyBindings(avm);
 
             var chat = $.connection.chatHub;
-            //chat.client.updateState = function (state) {
-            //    var state = jQuery.parseJSON(state);
-            //    avm.head(state.head);
-            //    avm.title(state.title);
-            //    avm.buttontext(state.buttontext);
-            //    avm.url(state.url);
-            //    avm.method(state.method);
-            //    avm.headers(state.headers);
-            //    avm.pwd(state.pwd);
-            //    avm.user(state.user);
-            //    avm.request(state.request);
-            //    avm.requesttitle(state.requesttitle);
-            //    avm.response(state.response);
-            //    avm.responsetitle(state.responsetitle);
-            //};
-
+      
             $.connection.hub.start().done(function () {
                 $('#button').click(function () {
                     var jsonData = ko.toJSON(avm.selectedPreset().Settings);

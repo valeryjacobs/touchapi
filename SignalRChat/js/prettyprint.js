@@ -3,9 +3,9 @@
 
 library.json = {
     replacer: function (match, pIndent, pKey, pVal, pEnd) {
-        var key = '<span class=json-key>';
-        var val = '<span class=json-value>';
-        var str = '<span class=json-string>';
+        var key = '<span STYLE="font-size: 200%" class=json-key>';
+        var val = '<span STYLE="font-size: 200%" class=json-value>';
+        var str = '<span STYLE="font-size: 200%" class=json-string>';
         var r = pIndent || '';
         if (pKey)
             r = r + key + pKey.replace(/[": ]/g, '') + '</span>: ';
