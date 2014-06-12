@@ -13,6 +13,7 @@ using System.Web.Http.OData;
 using System.Web.Http.OData.Routing;
 using APIManagementDemo.Entities;
 using APIManagementDemo.Models;
+using System.Web.Http.Cors;
 
 namespace APIManagementDemo.Controllers
 {
