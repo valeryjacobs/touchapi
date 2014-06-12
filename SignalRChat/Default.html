@@ -244,20 +244,36 @@
 
                     var ajaxTime = new Date().getTime();
 
-                    var ajx = $.ajax({
+                    //$.ajax({
+                    //    url: avm.url(),
+                    //    data: { value: 1 },
+                    //    method: 'GET',
+                    //    dataType: 'json',
+                    //    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //        avm.responseStatus(XMLHttpRequest.status);
+                    //        avm.response(XMLHttpRequest.statusText);
+                    //    },
+                    //    success: function (data) {
+                    //        avm.response(library.json.prettyPrint(data));
+                    //               avm.responseSize(JSON.stringify(data).length + " bytes  ");
+                    //               avm.responseStatus(textstatus);}
+                    //})
+
+                    $.ajax({
                         url: avm.url(),
                         data: avm.request(),
                         type: avm.method(),
                         dataType: 'json',
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
-                                console.log('There was a 404 error.');
-                            }
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            avm.responseStatus(XMLHttpRequest.status);
+                            avm.responseSize( "- bytes  ");
+                            avm.response(XMLHttpRequest.statusText);
                         },
                         success: function (data, textstatus, request) {
                             avm.response(library.json.prettyPrint(data));
                             avm.responseSize(JSON.stringify(data).length + " bytes  ");
                             avm.responseStatus(textstatus);
+                            avm.responseTime(new Date() - ajaxTime + " ms");
                         },
                     });
                 })
