@@ -15,8 +15,6 @@ namespace APIManagementDemo
             var cors = new EnableCorsAttribute("http://apimanagementdemo.azurewebsites.net,http://apitouch.nl,http://localhost:52527", "*", "*");
             config.EnableCors(cors);
 
-            //config.EnableCors();
-
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
